@@ -1,0 +1,133 @@
+.users-page-container {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-main-title { font-size: 24px; font-weight: 700; color: #0f172a; margin: 0; }
+.page-subtitle { font-size: 14px; color: #64748b; margin: 4px 0 0 0; }
+
+.add-user-btn {
+  background-color: #3b82f6;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-user-btn:hover { background-color: #2563eb; }
+
+/* Search Bar Styling */
+.search-wrapper {
+  position: relative;
+  max-width: 350px;
+  margin-bottom: 20px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.users-search-input {
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 14px;
+  outline: none;
+  background-color: white;
+  transition: border-color 0.2s;
+}
+
+.users-search-input:focus { border-color: #3b82f6; }
+
+/* Table Styling */
+.users-table-card {
+  background: white;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.users-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.users-data-table th {
+  background: #f8fafc;
+  padding: 14px 20px;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 600;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.users-data-table td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #334155;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.table-row:hover { background-color: #fbfcfe; }
+
+.user-name-cell { font-weight: 600; color: #0f172a; }
+
+/* Status Tags */
+.status-tag {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-tag.active { background-color: #dcfce7; color: #15803d; }
+.status-tag.blocked { background-color: #fee2e2; color: #b91c1c; }
+
+.joined-date { color: #94a3b8; }
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.view-btn, .delete-btn {
+  border: none;
+  background: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.view-btn { color: #3b82f6; }
+.view-btn:hover { background-color: #eff6ff; }
+
+.delete-btn { color: #ef4444; }
+.delete-btn:hover { background-color: #fef2f2; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,128 @@
+.bookings-page-wrapper {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.bookings-main-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.bookings-sub-title {
+  font-size: 14px;
+  color: #64748b;
+  margin: 6px 0 25px 0;
+}
+
+/* Search & Tabs Row */
+.bookings-filter-bar {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.bookings-search-field {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  flex: 1;
+  max-width: 400px;
+}
+
+.bookings-search-field input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  padding-left: 10px;
+}
+
+.status-tabs-container {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.status-tab-btn {
+  padding: 8px 18px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.status-tab-btn.active-blue {
+  background-color: #3b82f6; /* Exact blue from SS */
+  color: white;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Table Card Styling */
+.bookings-table-wrapper {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.lovable-bookings-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lovable-bookings-table th {
+  background: #f8fafc;
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.lovable-bookings-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #334155;
+}
+
+.booking-id-cell { font-weight: 700; color: #1e293b; }
+.amount-cell { font-weight: 600; color: #0f172a; }
+
+/* Status Badges */
+.status-badge-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge-pill.completed { background: #dcfce7; color: #15803d; }
+.status-badge-pill.pending { background: #fef9c3; color: #a16207; }
+.status-badge-pill.cancelled { background: #fee2e2; color: #b91c1c; }
+
+.view-details-btn {
+  background: none;
+  border: none;
+  color: #0ea5e9;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

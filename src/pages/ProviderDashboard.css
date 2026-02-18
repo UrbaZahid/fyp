@@ -1,0 +1,41 @@
+.provider-layout { display: flex; min-height: 100vh; background: #f8fafc; }
+
+/* Sidebar */
+.p-sidebar { width: 260px; background: white; border-right: 1px solid #e2e8f0; padding: 25px; position: fixed; height: 100vh; }
+.p-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: #1e293b; }
+.p-logo { background: #f59e0b; color: white; padding: 5px; border-radius: 8px; }
+.p-tag { font-size: 10px; color: #f59e0b; background: #fffbeb; padding: 2px 8px; border-radius: 10px; width: fit-content; margin: 10px 0 30px 0; font-weight: bold; }
+.p-nav { display: flex; flex-direction: column; gap: 5px; }
+.p-nav-item { text-align: left; padding: 12px 15px; border: none; background: none; border-radius: 10px; color: #64748b; font-weight: 600; cursor: pointer; }
+.p-nav-item.active { background: #f59e0b; color: white; }
+
+/* Main Section */
+.p-main { margin-left: 260px; flex-grow: 1; display: flex; flex-direction: column; }
+.p-content-inner { padding: 40px; flex-grow: 1; }
+.p-header h2 { font-size: 24px; font-weight: 800; margin-bottom: 25px; }
+
+/* Stats */
+.p-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+.p-stat-card { background: white; padding: 20px; border-radius: 15px; border: 1px solid #f1f5f9; display: flex; align-items: center; gap: 15px; }
+.p-icon-box { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.p-icon-box.orange { background: #fff7ed; color: #f59e0b; }
+.p-icon-box.blue { background: #eff6ff; color: #2563eb; }
+.p-icon-box.green { background: #f0fdf4; color: #16a34a; }
+.p-icon-box.gold { background: #fffbeb; color: #d97706; }
+
+/* Banner */
+.p-alert-banner { background: #fff7ed; border: 1px solid #ffedd5; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.p-alert-text { display: flex; gap: 15px; align-items: center; }
+.p-clock { background: #f59e0b; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.p-view-btn { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+/* Booking Item */
+.p-booking-item { background: white; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #f1f5f9; }
+.p-client { display: flex; gap: 15px; }
+.p-client-img { width: 40px; height: 40px; background: #f1f5f9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+.p-badge-completed { background: #f0fdf4; color: #16a34a; font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
+
+/* User Info Sidebar */
+.p-user-info { margin-top: auto; border-top: 1px solid #f1f5f9; padding-top: 20px; }
+.p-avatar-box { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+.p-avatar { background: #f59e0b; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }

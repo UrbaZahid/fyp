@@ -1,0 +1,10 @@
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; border-bottom: 1px solid #f3f4f6; }
+.logo-area { display: flex; align-items: center; gap: 10px; }
+.logo-box { background: #4f46e5; color: #fff; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+.logo-name { font-weight: 800; font-size: 22px; }
+.nav-links a { margin: 0 15px; text-decoration: none; color: #666; font-weight: 500; }
+.register-btn { background: #2563eb; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.login-link { background: none; border: none; font-weight: 600; margin-right: 15px; cursor: pointer; } 
+.nav-links.customer-links{
+  margin-right: 200px;
+}

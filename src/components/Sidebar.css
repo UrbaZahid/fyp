@@ -1,0 +1,222 @@
+.sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+/* Admin Sidebar - Dark Theme */
+.sidebar.admin-sidebar {
+  background: #0f172a;
+  color: white;
+}
+
+/* Provider Sidebar */
+.sidebar.provider-sidebar {
+  background: white;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+.admin-sidebar .sidebar-brand {
+  color: white;
+}
+
+.logo-box {
+  background: #f59e0b;
+  color: white;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 18px;
+}
+
+.admin-sidebar .logo-box {
+  background: #f59e0b;
+}
+
+.p-tag {
+  font-size: 10px;
+  color: #f59e0b;
+  background: #fffbeb;
+  padding: 4px 12px;
+  border-radius: 12px;
+  width: fit-content;
+  margin-bottom: 25px;
+  font-weight: bold;
+}
+
+.a-badge {
+  color: #3b82f6;
+  font-size: 10px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 4px 12px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.sidebar-nav {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  color: #64748b;
+  text-decoration: none;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background: #f1f5f9;
+}
+
+.nav-item.active {
+  background: #2563eb;
+  color: white;
+}
+
+/* Admin sidebar navigation */
+.admin-sidebar .nav-item {
+  color: #94a3b8;
+}
+
+.admin-sidebar .nav-item:hover {
+  background: #1e293b;
+}
+
+.admin-sidebar .nav-item.active {
+  background: #1e293b;
+  color: white;
+}
+
+/* Provider sidebar - special styling for bookings */
+.provider-sidebar .nav-item.booking-requests {
+  background: #2563eb;
+  color: white;
+}
+
+.sidebar-user {
+  margin-top: auto;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 20px;
+}
+
+.admin-sidebar .sidebar-user {
+  border-top-color: #1e293b;
+}
+
+.user-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-avatar {
+  width: 35px;
+  height: 35px;
+  background: #2563eb;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.provider-sidebar .user-avatar {
+  background: #f59e0b;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: #1e293b;
+}
+
+.admin-sidebar .user-name {
+  color: white;
+}
+
+.user-email {
+  font-size: 11px;
+  color: #64748b;
+  margin: 0;
+}
+
+.admin-sidebar .user-email {
+  color: #94a3b8;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.logout-btn:hover {
+  color: #ef4444;
+}
+
+.admin-sidebar .logout-btn {
+  color: #94a3b8;
+}
+
+.admin-sidebar .logout-btn:hover {
+  color: #ef4444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    position: relative;
+    height: auto;
+  }
+}
+.mobile-sidebar-wrap .sidebar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 260px !important;
+  height: 100vh !important;
+  overflow-y: auto;
+}

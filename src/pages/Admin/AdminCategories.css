@@ -1,0 +1,142 @@
+.cat-page-container {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Header Section */
+.cat-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.cat-main-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.cat-sub-title {
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 5px;
+}
+
+.cat-add-btn {
+  background-color: #3b82f6;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s;
+}
+
+.cat-add-btn:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* Grid Layout */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+/* Card Styling */
+.category-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.category-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.card-top-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.cat-icon-display {
+  font-size: 32px;
+}
+
+/* Edit/Delete Buttons (Hidden until Hover) */
+.cat-action-group {
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.category-card:hover .cat-action-group {
+  opacity: 1;
+}
+
+.cat-edit-icon, .cat-delete-icon {
+  background: #f1f5f9;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.cat-edit-icon:hover { background: #e2e8f0; color: #3b82f6; }
+.cat-delete-icon:hover { background: #fee2e2; color: #ef4444; }
+
+/* Content inside Card */
+.cat-name-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.cat-service-count {
+  font-size: 13px;
+  color: #64748b;
+  margin: 4px 0 12px 0;
+}
+
+/* Status Badges */
+.cat-status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cat-status-badge.active {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #15803d;
+}
+
+.cat-status-badge.inactive {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
