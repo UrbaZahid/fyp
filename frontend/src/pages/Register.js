@@ -96,7 +96,7 @@ const Register = () => {
         payload.charges      = Number(formData.charges)    || 0;
       }
 
-      const { data } = await API.post('/auth/register', payload);
+       await API.post('/auth/register', payload);
 
       if (role === 'Provider') {
         setSuccess('Account created! Admin approval ke baad login kar sakte hain.');

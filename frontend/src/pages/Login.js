@@ -104,7 +104,7 @@ const Login = ({ setRole }) => {
             <div className="input-group">
               <div className="label-row">
                 <label>Password</label>
-                <a href="#" className="forgot-pass">Forgot password?</a>
+                <button className="forgot-pass" onClick={() => {}}>Forgot password?</button>
               </div>
               <div className="password-wrapper">
                 <input

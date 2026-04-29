@@ -33,6 +33,7 @@ const ProviderDashboard = () => {
 
         setStats({
           pending,
+          accepted,
           total: allBookings.length,
           completed,
           earnings,

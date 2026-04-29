@@ -4,7 +4,6 @@ import API from '../api/api';
 import './Services.css';
 
 const Services = () => {
-  const navigate = useNavigate();
   const [categories, setCategories]     = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading]           = useState(true);
