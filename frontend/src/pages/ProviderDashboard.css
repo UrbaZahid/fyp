@@ -1,0 +1,265 @@
+/* ───────────── Layout ───────────── */
+.provider-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+/* ───────────── Sidebar ───────────── */
+.p-sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  padding: 25px;
+  position: fixed;
+  height: 100vh;
+}
+
+.p-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 20px;
+  color: #1e293b;
+}
+
+.p-logo {
+  background: #f59e0b;
+  color: white;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.p-tag {
+  font-size: 10px;
+  color: #f59e0b;
+  background: #fffbeb;
+  padding: 2px 8px;
+  border-radius: 10px;
+  width: fit-content;
+  margin: 10px 0 25px 0;
+  font-weight: bold;
+}
+
+.p-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.p-nav-item {
+  text-align: left;
+  padding: 12px 15px;
+  border: none;
+  background: none;
+  border-radius: 10px;
+  color: #64748b;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.p-nav-item.active {
+  background: #f59e0b;
+  color: white;
+}
+
+/* ───────────── Main Area ───────────── */
+.p-main {
+  margin-left: 260px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.p-content-inner {
+  padding: 40px;
+}
+
+/* Header */
+.p-header h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #1e293b;
+}
+
+.p-header p {
+  color: #64748b;
+  margin-bottom: 25px;
+}
+
+/* ───────────── Loading ───────────── */
+.p-loading {
+  padding: 50px;
+  text-align: center;
+  color: #64748b;
+}
+
+/* ───────────── Stats ───────────── */
+.p-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.p-stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.p-stat-card h4 {
+  font-size: 20px;
+  margin: 0;
+  color: #1e293b;
+}
+
+.p-stat-card p {
+  font-size: 13px;
+  margin: 0;
+  color: #64748b;
+}
+
+/* Optional icon box (if you use it later) */
+.p-icon-box {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.p-icon-box.orange { background: #fff7ed; color: #f59e0b; }
+.p-icon-box.blue { background: #eff6ff; color: #2563eb; }
+.p-icon-box.green { background: #f0fdf4; color: #16a34a; }
+.p-icon-box.gold { background: #fffbeb; color: #d97706; }
+
+/* ───────────── Alert ───────────── */
+.p-alert {
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  padding: 18px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  gap: 10px;
+  font-weight: 600;
+  color: #92400e;
+}
+
+/* ───────────── Section Title ───────────── */
+.p-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 20px 0 15px 0;
+  color: #1e293b;
+}
+
+/* ───────────── Recent List ───────────── */
+.p-recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ───────────── Booking Item ───────────── */
+.p-booking-item {
+  background: white;
+  padding: 18px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #f1f5f9;
+}
+
+.p-client {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.p-avatar {
+  width: 40px;
+  height: 40px;
+  background: #f59e0b;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Right side of booking */
+.p-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+/* ───────────── Status ───────────── */
+.status {
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-completed {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #f59e0b;
+}
+
+.status-accepted {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+/* ───────────── Responsive ───────────── */
+@media (max-width: 768px) {
+  .p-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .p-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .p-main {
+    margin-left: 0;
+  }
+
+  .p-booking-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .p-right {
+    align-items: flex-start;
+  }
+}

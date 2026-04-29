@@ -1,0 +1,205 @@
+.register-page {
+  background-color: #f8fafc;
+  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.register-card {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.register-card h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+.subtitle { color: #64748b; margin-bottom: 30px; font-size: 15px; }
+
+.register-as-section { text-align: left; margin-bottom: 25px; }
+.register-as-section .label { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+
+.role-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.role-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.role-card.active {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+}
+
+.role-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.role-icon-box.blue { background: #2563eb; color: white; }
+.role-icon-box.gray { background: #f1f5f9; color: #64748b; }
+
+.role-text strong { display: block; font-size: 14px; }
+.role-text span { font-size: 12px; color: #64748b; }
+
+.register-form { text-align: left; margin-top: 25px; }
+.input-group { margin-bottom: 18px; }
+.input-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #334155; }
+.input-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  outline: none;
+}
+
+.pass-input { position: relative; }
+.eye-btn { position: absolute; right: 15px; top: 12px; color: #94a3b8; cursor: pointer; }
+
+.create-acc-btn {
+  width: 100%;
+  background: #2563eb;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.bottom-text { margin-top: 25px; font-size: 14px; color: #64748b; }
+.bottom-text a { color: #2563eb; font-weight: 700; text-decoration: none; }
+
+/* Purana sara Register.css rahega, ye mazeed add karein */
+
+.admin-warning {
+  display: flex;
+  gap: 15px;
+  background-color: #fffbeb;
+  border: 1px solid #fef3c7;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: left;
+  margin-bottom: 25px;
+  align-items: flex-start;
+}
+
+.warning-icon {
+  background: #f59e0b;
+  color: white;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.warning-content strong {
+  display: block;
+  font-size: 14px;
+  color: #92400e;
+  margin-bottom: 4px;
+}
+
+.warning-content p {
+  font-size: 12px;
+  color: #b45309;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Eye button style */
+.pass-input { position: relative; }
+.eye-btn { position: absolute; right: 15px; top: 12px; cursor: pointer; color: #94a3b8; }
+/* ── Provider Extra Fields ── */
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.input-group select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+}
+
+.input-group .hint {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* ── Area Chips ── */
+.area-chips-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.area-chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  user-select: none;
+  background: #e2e8f0;
+  color: #475569;
+  transition: all 0.2s;
+  border: none;
+}
+
+.area-chip.selected {
+  background: #2563eb;
+  color: white;
+}
+
+.area-chip.all-chip.selected {
+  background: #4f46e5;
+  color: white;
+}
+
+.areas-selected-count {
+  font-size: 12px;
+  color: #16a34a;
+  margin-top: 6px;
+  font-weight: 500;
+}
+.alert {
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: left;
+}
+.alert-error   { background: #fee2e2; color: #dc2626; }
+.alert-success { background: #dcfce7; color: #16a34a; }
