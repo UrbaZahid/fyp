@@ -14,7 +14,7 @@ app.use(cors({
    origin:
    [
     'http://localhost:3000',
-    'fyp-woad-chi.vercel.app'
+    'https://fyp-woad-chi.vercel.app'
   ],
   credentials: true
 }));
