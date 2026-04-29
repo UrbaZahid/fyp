@@ -1,6 +1,6 @@
 // src/App.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 
 // Pages
@@ -34,9 +34,9 @@ import AdminReports from './pages/Admin/Reports';
 
 // Components
 import CustomerNavbar from './components/CustomerNavbar';
+import API from './api/api';
 
 // ─── Protected Route ──────────────────────────────────────────
-// Bina login dashboard nahi kholega
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem('token');
   const user  = JSON.parse(localStorage.getItem('user') || 'null');
@@ -56,8 +56,8 @@ function AppContent({ role, setRole }) {
   return (
     <>
       {!isAdminPath && !isProviderPath && (
-      <CustomerNavbar role={role} setRole={setRole} />
-       )}
+        <CustomerNavbar role={role} setRole={setRole} />
+      )}
 
       <Routes>
         {/* ── Public Routes ───────────────────── */}
@@ -158,11 +158,33 @@ function AppContent({ role, setRole }) {
 }
 
 function App() {
-  // localStorage se role load karo — refresh pe bhi role rahe
+  // Read role from localStorage on first render
   const [role, setRole] = useState(() => {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     return user?.role || null;
   });
+
+  // ── On startup: validate stored token against the backend ────
+  // If the token is expired/invalid the server returns 401 which
+  // the API interceptor handles (clears localStorage + redirects).
+  // Here we just sync the role state to reflect a cleared token.
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setRole(null);
+      return;
+    }
+
+    API.get('/auth/me')
+      .then(({ data }) => {
+        // Token valid — keep role in sync (handles stale role mismatches)
+        setRole(data.user.role);
+      })
+      .catch(() => {
+        // 401 or network error — interceptor already cleared localStorage
+        setRole(null);
+      });
+  }, []); // runs once on app mount
 
   return (
     <Router>

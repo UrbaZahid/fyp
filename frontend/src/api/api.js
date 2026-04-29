@@ -6,7 +6,7 @@ const API = axios.create({
   baseURL: 'http://localhost:5000/api',
 });
 
-// Har request mein automatically JWT token attach karo
+// ── Request interceptor: attach JWT token ────────────────────────
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -14,5 +14,27 @@ API.interceptors.request.use((req) => {
   }
   return req;
 });
+
+// ── Response interceptor: on 401, clear stale auth ─────────────
+// Fixes "navbar wrong on project run" — expired/invalid token gets
+// wiped so navbar shows Login/Register correctly without manual clear.
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      const publicPaths = ['/', '/login', '/register', '/services'];
+      const isPublic = publicPaths.some((p) =>
+        window.location.pathname === p ||
+        window.location.pathname.startsWith('/services/')
+      );
+      if (!isPublic) {
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default API;
