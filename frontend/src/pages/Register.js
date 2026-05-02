@@ -21,9 +21,10 @@ const Register = () => {
     charges:       '',
   });
 
-  const [error,   setError]   = useState('');
-  const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [error,   setError]       = useState('');
+  const [success, setSuccess]     = useState('');
+  const [loading, setLoading]     = useState(false);
+  const [phoneError, setPhoneError] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,17 +67,20 @@ const Register = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setPhoneError('');
 
     if (formData.password !== formData.confirmPassword)
       return setError('Passwords do not match!');
 
-    // Phone validation: must start with +92 and be exactly 12 digits after +
+    // Phone validation — shows inline under the phone field
     const phoneDigits = formData.phone.replace(/\D/g, '');
     if (!formData.phone.startsWith('+92')) {
-      return setError('Phone number must start with +92 (Pakistan).');
+      setPhoneError('Phone number must start with +92 (Pakistan).');
+      return;
     }
     if (phoneDigits.length !== 12) {
-      return setError('Phone number must be exactly 12 digits (e.g. +923001234567).');
+      setPhoneError('Phone number must be exactly 12 digits (e.g. +923001234567).');
+      return;
     }
 
     if (role === 'Customer' && !formData.area)
@@ -173,12 +177,20 @@ const Register = () => {
                 value={formData.email} onChange={handleChange} required />
             </div>
             <div className="input-group">
-              <label>Phone Number <span className="hint">(Pakistan: +92XXXXXXXXXX)</span></label>
+              <label>
+                Phone Number <span className="hint">(Pakistan: +92XXXXXXXXXX)</span>
+                {phoneError && (
+                  <span style={{ color: '#dc2626', fontSize: '12px', fontWeight: '600', marginLeft: '6px' }}>
+                    — {phoneError}
+                  </span>
+                )}
+              </label>
               <input
                 type="tel"
                 name="phone"
                 placeholder="+923001234567"
                 value={formData.phone}
+                style={phoneError ? { borderColor: '#dc2626', background: '#fff5f5' } : {}}
                 onChange={(e) => {
                   let val = e.target.value;
                   // Ensure it always starts with +92
@@ -189,6 +201,7 @@ const Register = () => {
                   const digits = val.slice(3).replace(/\D/g, '').slice(0, 10);
                   val = '+92' + digits;
                   setFormData({ ...formData, phone: val });
+                  if (phoneError) setPhoneError('');
                 }}
                 required
               />

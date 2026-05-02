@@ -6,8 +6,8 @@ import API from '../../api/api';
 import '../bookingpage.css';
 
 const BookingPage = () => {
-  const navigate = useNavigate();
-  const { providerId } = useParams(); // URL se providerId lo
+  const navigate    = useNavigate();
+  const { providerId } = useParams();
 
   const [bookingData, setBookingData] = useState({
     name:     '',
@@ -21,59 +21,79 @@ const BookingPage = () => {
     notes:    ''
   });
 
-  const [selectedTime, setSelectedTime]   = useState('');
-  const [isSubmitted, setIsSubmitted]     = useState(false);
-  const [loading, setLoading]             = useState(false);
-  const [error, setError]                 = useState('');
+  const [fieldErrors, setFieldErrors]   = useState({});
+  const [isSubmitted, setIsSubmitted]   = useState(false);
+  const [loading, setLoading]           = useState(false);
+  const [error, setError]               = useState('');
 
   const timeSlots = [
     '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
     '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM',
-    '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM'
+    '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM',
   ];
-
   const unavailableSlots = ['12:00 PM', '03:00 PM'];
 
-  const handleChange = (e) => {
-    setBookingData({ ...bookingData, [e.target.name]: e.target.value });
-  };
-
-  const handleTimeSelect = (time) => {
-    if (!unavailableSlots.includes(time)) {
-      setSelectedTime(time);
-      setBookingData({ ...bookingData, time });
+  // ── Phone auto-format: always starts with +92, max 12 digits total ──
+  const handlePhoneChange = (e) => {
+    let val = e.target.value;
+    if (!val.startsWith('+92')) {
+      val = '+92' + val.replace(/^\+?9?2?/, '').replace(/\D/g, '');
     }
+    const digits = val.slice(3).replace(/\D/g, '').slice(0, 10);
+    val = '+92' + digits;
+    setBookingData(prev => ({ ...prev, phone: val }));
+    // clear inline error as user types
+    if (fieldErrors.phone) setFieldErrors(prev => ({ ...prev, phone: '' }));
   };
 
-  const isFormValid = () => {
-    return (
-      bookingData.name &&
-      bookingData.email &&
-      bookingData.phone &&
-      bookingData.address &&
-      bookingData.city &&
-      bookingData.date &&
-      bookingData.time
-    );
+  const handleChange = (e) => {
+    setBookingData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    if (fieldErrors[e.target.name])
+      setFieldErrors(prev => ({ ...prev, [e.target.name]: '' }));
   };
+
+  // ── Validate phone inline ──
+  const validatePhone = () => {
+    const digits = bookingData.phone.replace(/\D/g, '');
+    if (!bookingData.phone.startsWith('+92')) {
+      return 'Phone number must start with +92 (Pakistan).';
+    }
+    if (digits.length !== 12) {
+      return 'Phone number must be exactly 12 digits (e.g. +923001234567).';
+    }
+    return '';
+  };
+
+  const handlePhoneBlur = () => {
+    const err = validatePhone();
+    if (err) setFieldErrors(prev => ({ ...prev, phone: err }));
+  };
+
+  const isFormValid = () =>
+    bookingData.name && bookingData.email && bookingData.phone &&
+    bookingData.address && bookingData.city &&
+    bookingData.date && bookingData.time && !validatePhone();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isFormValid()) return;
 
-    // Login check — agar login nahi toh login page pe bhejo
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
+    // Run all inline validations before submit
+    const phoneErr = validatePhone();
+    if (phoneErr) {
+      setFieldErrors(prev => ({ ...prev, phone: phoneErr }));
       return;
     }
+    if (!isFormValid()) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) { navigate('/login'); return; }
 
     setLoading(true);
     setError('');
 
     try {
       await API.post('/bookings', {
-        providerId:    providerId,
+        providerId,
         customerName:  bookingData.name,
         customerEmail: bookingData.email,
         customerPhone: bookingData.phone,
@@ -86,12 +106,7 @@ const BookingPage = () => {
       });
 
       setIsSubmitted(true);
-
-      // 2 second baad My Bookings pe redirect karo
-      setTimeout(() => {
-        navigate('/customer/bookings');
-      }, 2500);
-
+      setTimeout(() => navigate('/customer/bookings'), 2500);
     } catch (err) {
       setError(err.response?.data?.message || 'Booking failed. Please try again.');
     } finally {
@@ -121,7 +136,7 @@ const BookingPage = () => {
           </div>
         </div>
 
-        {/* Success Message */}
+        {/* Success */}
         {isSubmitted && (
           <div className="success-message">
             <span className="icon">✅</span>
@@ -132,18 +147,12 @@ const BookingPage = () => {
           </div>
         )}
 
-        {/* Error Message */}
+        {/* Top-level error (server errors only) */}
         {error && (
-          <div style={{
-            background: '#fee2e2', color: '#dc2626',
-            padding: '12px 16px', borderRadius: '8px',
-            marginBottom: '16px'
-          }}>
-            {error}
-          </div>
+          <div className="booking-top-error">{error}</div>
         )}
 
-        {/* Main Form */}
+        {/* Form */}
         {!isSubmitted && (
           <div className="booking-grid">
             <div className="booking-form-section">
@@ -155,6 +164,7 @@ const BookingPage = () => {
                 <div className="form-section">
                   <h3>👤 Personal Information</h3>
                   <div className="form-grid">
+
                     <div className="form-field">
                       <label>Full Name *</label>
                       <input
@@ -162,8 +172,10 @@ const BookingPage = () => {
                         value={bookingData.name}
                         onChange={handleChange}
                         placeholder="John Doe" required
+                        className={fieldErrors.name ? 'input-error' : ''}
                       />
                     </div>
+
                     <div className="form-field">
                       <label>Email Address *</label>
                       <input
@@ -171,17 +183,32 @@ const BookingPage = () => {
                         value={bookingData.email}
                         onChange={handleChange}
                         placeholder="john@example.com" required
+                        className={fieldErrors.email ? 'input-error' : ''}
                       />
                     </div>
+
+                    {/* Phone — inline error below label */}
                     <div className="form-field full-width">
-                      <label>Phone Number *</label>
+                      <label>
+                        Phone Number *
+                        {fieldErrors.phone && (
+                          <span className="field-error-msg">
+                            &nbsp;— {fieldErrors.phone}
+                          </span>
+                        )}
+                      </label>
                       <input
                         type="tel" name="phone"
                         value={bookingData.phone}
-                        onChange={handleChange}
-                        placeholder="+92 300-1234567" required
+                        onChange={handlePhoneChange}
+                        onBlur={handlePhoneBlur}
+                        placeholder="+923001234567"
+                        required
+                        className={fieldErrors.phone ? 'input-error' : ''}
                       />
+                      <span className="field-hint">Format: +92 followed by 10 digits</span>
                     </div>
+
                   </div>
                 </div>
 
@@ -204,7 +231,7 @@ const BookingPage = () => {
                         type="text" name="city"
                         value={bookingData.city}
                         onChange={handleChange}
-                        placeholder="Lahore" required
+                        placeholder="Gujranwala" required
                       />
                     </div>
                   </div>
@@ -214,6 +241,7 @@ const BookingPage = () => {
                 <div className="form-section">
                   <h3>📅 Schedule Your Service</h3>
                   <div className="form-grid">
+
                     <div className="form-field">
                       <label>Select Date *</label>
                       <input
@@ -224,13 +252,10 @@ const BookingPage = () => {
                         required
                       />
                     </div>
+
                     <div className="form-field">
                       <label>Estimated Duration</label>
-                      <select
-                        name="duration"
-                        value={bookingData.duration}
-                        onChange={handleChange}
-                      >
+                      <select name="duration" value={bookingData.duration} onChange={handleChange}>
                         <option value="1">1 hour</option>
                         <option value="2">2 hours</option>
                         <option value="3">3 hours</option>
@@ -238,22 +263,39 @@ const BookingPage = () => {
                         <option value="5">5+ hours</option>
                       </select>
                     </div>
-                  </div>
 
-                  {/* Time Slots */}
-                  <div className="form-field" style={{ marginTop: '16px' }}>
-                    <label>Select Time Slot *</label>
-                    <div className="time-slots">
-                      {timeSlots.map((slot) => (
-                        <div
-                          key={slot}
-                          className={`time-slot ${selectedTime === slot ? 'selected' : ''} ${unavailableSlots.includes(slot) ? 'unavailable' : ''}`}
-                          onClick={() => handleTimeSelect(slot)}
-                        >
-                          {slot}
-                        </div>
-                      ))}
+                    {/* Time slot — single dropdown */}
+                    <div className="form-field full-width">
+                      <label>
+                        Select Time Slot *
+                        {fieldErrors.time && (
+                          <span className="field-error-msg">&nbsp;— {fieldErrors.time}</span>
+                        )}
+                      </label>
+                      <select
+                        name="time"
+                        value={bookingData.time}
+                        onChange={(e) => {
+                          handleChange(e);
+                          if (fieldErrors.time)
+                            setFieldErrors(prev => ({ ...prev, time: '' }));
+                        }}
+                        required
+                        className={fieldErrors.time ? 'input-error' : ''}
+                      >
+                        <option value="">-- Choose a time slot --</option>
+                        {timeSlots.map(slot => (
+                          <option
+                            key={slot}
+                            value={slot}
+                            disabled={unavailableSlots.includes(slot)}
+                          >
+                            {slot}{unavailableSlots.includes(slot) ? ' (Unavailable)' : ''}
+                          </option>
+                        ))}
+                      </select>
                     </div>
+
                   </div>
                 </div>
 
@@ -271,23 +313,24 @@ const BookingPage = () => {
                   </div>
                 </div>
 
-                {/* Buttons */}
+                {/* Actions */}
                 <div className="form-actions">
                   <button
                     type="submit"
                     className="confirm-booking-btn"
-                    disabled={!isFormValid() || loading}
+                    disabled={loading}
                   >
                     {loading ? 'Sending...' : 'Send Booking Request →'}
                   </button>
                   <button
                     type="button"
                     className="cancel-booking-btn"
-                    onClick={() => navigate('/services')}
+                    onClick={() => navigate(-1)}
                   >
                     Cancel
                   </button>
                 </div>
+
               </form>
             </div>
           </div>
