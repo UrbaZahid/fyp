@@ -38,13 +38,22 @@ const ServiceDetails = () => {
           ? `?area=${encodeURIComponent(userArea)}`
           : '';
 
-        const res = await API.get(`/providers${query}`);
+        const [res, areasRes] = await Promise.all([
+          API.get(`/providers${query}`),
+          API.get('/areas'),
+        ]);
         const all = res.data.providers || [];
+        const totalAreas = (areasRes.data.areas || []).map(a => a.name);
 
         const decodedService = decodeURIComponent(serviceName).toLowerCase().trim();
-        const matched = all.filter(
-          (p) => p.category && p.category.name.toLowerCase().trim() === decodedService
-        );
+        const matched = all
+          .filter(p => p.category && p.category.name.toLowerCase().trim() === decodedService)
+          .map(p => ({
+            ...p,
+            _allAreasSelected:
+              totalAreas.length > 0 &&
+              (p.serviceAreas || []).length === totalAreas.length,
+          }));
         setProviders(matched);
       } catch (err) {
         setError('Could not load providers. Please retry.');
@@ -227,7 +236,11 @@ const ServiceDetails = () => {
 
                   {areas.length > 0 && (
                     <div style={{ marginBottom: '12px', fontSize: '13px', color: '#64748b' }}>
-                      📍 Serves: {areas.join(', ')}
+                      📍 Serves:{' '}
+                      {/* If provider selected all available areas, show city name instead of long list */}
+                      {provider._allAreasSelected
+                        ? 'Gujranwala (All Areas)'
+                        : areas.join(', ')}
                     </div>
                   )}
 

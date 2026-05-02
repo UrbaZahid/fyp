@@ -69,6 +69,16 @@ const Register = () => {
 
     if (formData.password !== formData.confirmPassword)
       return setError('Passwords do not match!');
+
+    // Phone validation: must start with +92 and be exactly 12 digits after +
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    if (!formData.phone.startsWith('+92')) {
+      return setError('Phone number must start with +92 (Pakistan).');
+    }
+    if (phoneDigits.length !== 12) {
+      return setError('Phone number must be exactly 12 digits (e.g. +923001234567).');
+    }
+
     if (role === 'Customer' && !formData.area)
       return setError('Please select your area.');
     if (role === 'Provider' && formData.selectedAreas.length === 0)
@@ -99,9 +109,9 @@ const Register = () => {
        await API.post('/auth/register', payload);
 
       if (role === 'Provider') {
-        setSuccess('Account created! Admin approval ke baad login kar sakte hain.');
+        setSuccess('Account created! You can log in after admin approval.');
       } else {
-        setSuccess('Account successfully bana! Ab login karo...');
+        setSuccess('Account created successfully! Redirecting to login...');
         setTimeout(() => navigate('/login'), 2000);
       }
 
@@ -163,9 +173,25 @@ const Register = () => {
                 value={formData.email} onChange={handleChange} required />
             </div>
             <div className="input-group">
-              <label>Phone Number</label>
-              <input type="tel" name="phone" placeholder="+92 300-1234567"
-                value={formData.phone} onChange={handleChange} required />
+              <label>Phone Number <span className="hint">(Pakistan: +92XXXXXXXXXX)</span></label>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="+923001234567"
+                value={formData.phone}
+                onChange={(e) => {
+                  let val = e.target.value;
+                  // Ensure it always starts with +92
+                  if (!val.startsWith('+92')) {
+                    val = '+92' + val.replace(/^\+92?/, '').replace(/\D/g, '');
+                  }
+                  // Limit to +92 + 10 digits = 13 chars total
+                  const digits = val.slice(3).replace(/\D/g, '').slice(0, 10);
+                  val = '+92' + digits;
+                  setFormData({ ...formData, phone: val });
+                }}
+                required
+              />
             </div>
 
             {/* Customer — single area */}

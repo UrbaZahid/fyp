@@ -24,7 +24,7 @@ const AdminCategories = () => {
       const { data } = await API.get("/categories");
       setCategories(data.categories || []);
     } catch (err) {
-      setError("Categories load nahi ho sake.");
+      setError("Could not load categories. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ const AdminCategories = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Is category ko delete karna chahte hain?")) return;
+    if (!window.confirm("Are you sure you want to delete this category?")) return;
     try {
       await API.delete(`/categories/${id}`);
       fetchCategories();
@@ -117,7 +117,7 @@ const AdminCategories = () => {
                 textAlign: "center", padding: "60px", color: "#64748b"
               }}>
                 <div style={{ fontSize: "48px", marginBottom: "12px" }}>📂</div>
-                <p>Koi category nahi hai. Pehli category add karo!</p>
+                <p>No categories found. Add your first category!</p>
               </div>
             ) : (
               <div className="categories-grid">

@@ -1,20 +1,37 @@
 // src/components/Sidebar.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 
 const Sidebar = ({ role }) => {
   const navigate  = useNavigate();
   const location  = useLocation();
+  const [open, setOpen] = useState(false);
 
-  // localStorage se real user lo
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+  // Close sidebar when route changes (mobile nav)
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  // Close on outside click (mobile)
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e) => {
+      if (!e.target.closest('.sidebar') && !e.target.closest('.hamburger-btn')) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     navigate('/login');
-    window.location.reload(); // App.js role state reset karo
+    window.location.reload();
   };
 
   const getNavItems = () => {
@@ -49,40 +66,58 @@ const Sidebar = ({ role }) => {
   const navItems = getNavItems();
 
   return (
-    <aside className={`sidebar ${role === 'admin' ? 'admin-sidebar' : ''} ${role === 'provider' ? 'provider-sidebar' : ''}`}>
-      <div className="sidebar-brand">
-        <div className="logo-box">🔧</div>
-        <span>FixIT</span>
-      </div>
+    <>
+      {/* ── Hamburger button — only visible on mobile ── */}
+      <button
+        className="hamburger-btn"
+        onClick={() => setOpen(!open)}
+        aria-label="Toggle menu"
+      >
+        <span className={`ham-line ${open ? 'open' : ''}`}></span>
+        <span className={`ham-line ${open ? 'open' : ''}`}></span>
+        <span className={`ham-line ${open ? 'open' : ''}`}></span>
+      </button>
 
-      {role === 'provider' && <div className="p-tag">Service Provider</div>}
-      {role === 'admin'    && <div className="a-badge">Admin Panel</div>}
+      {/* ── Overlay behind sidebar on mobile ── */}
+      {open && <div className="sidebar-overlay" onClick={() => setOpen(false)} />}
 
-      <nav className="sidebar-nav">
-        {navItems.map((item, idx) => (
-          <Link
-            key={idx}
-            to={item.path}
-            className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
-          >
-            {item.icon} {item.label}
-          </Link>
-        ))}
-      </nav>
-
-      <div className="sidebar-user">
-        <div className="user-info">
-          <div className="user-avatar">
-            {user?.name?.charAt(0).toUpperCase() || 'U'}
-          </div>
-          <div>
-            <p className="user-name">{user?.name || 'User'}</p>
-            <p className="user-email">{user?.email || ''}</p>
-          </div>
+      {/* ── Sidebar ── */}
+      <aside className={`sidebar ${role === 'admin' ? 'admin-sidebar' : ''} ${role === 'provider' ? 'provider-sidebar' : ''} ${open ? 'sidebar-open' : ''}`}>
+        <div className="sidebar-brand">
+          <div className="logo-box">🔧</div>
+          <span>FixIT</span>
         </div>
-        <button className="logout-btn" onClick={handleLogout}>↪ Logout</button>
-      </div>
-    </aside>
+
+        {role === 'provider' && <div className="p-tag">Service Provider</div>}
+        {role === 'admin'    && <div className="a-badge">Admin Panel</div>}
+
+        <nav className="sidebar-nav">
+          {navItems.map((item, idx) => (
+            <Link
+              key={idx}
+              to={item.path}
+              className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
+            >
+              <span className="nav-icon">{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </nav>
+
+        <div className="sidebar-user">
+          <div className="user-info">
+            <div className="user-avatar">
+              {user?.name?.charAt(0).toUpperCase() || 'U'}
+            </div>
+            <div className="user-text">
+              <p className="user-name">{user?.name || 'User'}</p>
+              <p className="user-email">{user?.email || ''}</p>
+            </div>
+          </div>
+          <button className="logout-btn" onClick={handleLogout}>↪ Logout</button>
+        </div>
+      </aside>
+    </>
   );
 };
 

@@ -65,18 +65,32 @@
   border-color: #2563eb;
   background: white;
 }
-.accept-btn{
+.accept-btn {
   width: max-content;
-  padding: 12px 30px;
-  background: #2563eb;
+  padding: 13px 36px;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 700;
+  font-size: 15px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.2s ease;
   align-self: flex-start;
-  margin-top: 10px;
+  margin-top: 14px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  letter-spacing: 0.3px;
+}
+
+.accept-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+  background: linear-gradient(135deg, #1d4ed8, #4338ca);
+}
+
+.accept-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
 
 .save-btn:hover {
@@ -104,4 +118,9 @@
   .profile-card {
     padding: 20px;
   }
+}
+/* ── Additional responsive fixes ── */
+@media (max-width: 768px) {
+  .profile-page-content { padding: 16px !important; padding-top: 64px !important; }
+  .profile-form-grid { grid-template-columns: 1fr !important; }
 }

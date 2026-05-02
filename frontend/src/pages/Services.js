@@ -79,7 +79,7 @@ const Services = () => {
         {filteredCategories.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px', color: '#6b7280' }}>
             <p style={{ fontSize: '48px' }}>🔧</p>
-            <p>No services found. Admin ne abhi koi service add nahi ki.</p>
+            <p>No services available yet.</p>
           </div>
         ) : (
           <div className="services-grid">

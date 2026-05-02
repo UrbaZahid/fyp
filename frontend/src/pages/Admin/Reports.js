@@ -15,7 +15,7 @@ const AdminReports = () => {
       const res = await API.get("/admin/reports");
       setData(res.data);
     } catch (err) {
-      setError("Reports load nahi ho sake.");
+      setError("Could not load reports. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -34,15 +34,15 @@ const AdminReports = () => {
     </AdminLayout>
   );
 
-  const { bookingSummary = {}, revenue = {}, categoryStats = [] } = data || {};
+  const { bookingSummary = {}, revenue = {}, topProviders = [] } = data || {};
   const total = bookingSummary.total || 1; // avoid divide by zero
 
   const completedPct  = Math.round(((bookingSummary.completed  || 0) / total) * 100);
   const pendingPct    = Math.round(((bookingSummary.pending    || 0) / total) * 100);
   const rejectedPct   = Math.round(((bookingSummary.rejected   || 0) / total) * 100);
 
-  // Max category count for bar width scaling
-  const maxCat = categoryStats.length > 0 ? Math.max(...categoryStats.map(c => c.count)) : 1;
+  // Max for bar scaling
+  const maxProv = topProviders.length > 0 ? Math.max(...topProviders.map(p => p.totalBookings)) : 1;
 
   return (
     <AdminLayout>
@@ -71,24 +71,32 @@ const AdminReports = () => {
         </div>
 
         <div className="charts-grid">
-          {/* Top Booked Services */}
+          {/* Most Active Providers — replaces Top Bookings (no rating system) */}
           <div className="chart-card">
-            <h3 className="chart-title">Top Booked Services</h3>
-            {categoryStats.length === 0 ? (
+            <h3 className="chart-title">Most Active Providers</h3>
+            <p style={{ color: "#94a3b8", fontSize: "12px", marginBottom: "16px" }}>
+              Providers ranked by total bookings received
+            </p>
+            {topProviders.length === 0 ? (
               <p style={{ color: "#64748b", fontSize: "14px", padding: "20px 0" }}>
-                Abhi koi booking data nahi hai.
+                No booking data available yet.
               </p>
             ) : (
               <div className="h-bar-container">
-                {categoryStats.map((item, idx) => (
-                  <div key={idx} className="h-bar-row">
-                    <span className="h-label">{item._id || "Unknown"}</span>
-                    <div className="h-track">
-                      <div className="h-fill" style={{ width: `${Math.round((item.count / maxCat) * 100)}%` }}></div>
+                {topProviders.map((item, idx) => {
+                  const name = item.provider?.[0]?.user?.name || `Provider ${idx + 1}`;
+                  return (
+                    <div key={idx} className="h-bar-row">
+                      <span className="h-label" title={name}>
+                        {name.length > 12 ? name.slice(0, 12) + "…" : name}
+                      </span>
+                      <div className="h-track">
+                        <div className="h-fill" style={{ width: `${Math.round((item.totalBookings / maxProv) * 100)}%` }}></div>
+                      </div>
+                      <span className="h-val">{item.totalBookings}</span>
                     </div>
-                    <span className="h-val">{item.count}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import API from "../../api/api";
@@ -26,7 +25,7 @@ const AdminAreas = () => {
       const { data } = await API.get("/admin/areas");
       setAreas(data.areas || []);
     } catch (err) {
-      setError(err.response?.data?.message || "Areas load nahi ho sake.");
+      setError(err.response?.data?.message || "Could not load areas. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -51,7 +51,7 @@ const AdminProviders = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Provider delete karna chahte hain?')) return;
+    if (!window.confirm('Are you sure you want to delete this provider?')) return;
     try {
       await API.delete(`/admin/providers/${id}`);
       setProviders(providers.filter(p => p._id !== id));
@@ -120,7 +120,7 @@ const AdminProviders = () => {
               </thead>
               <tbody>
                 {filtered.length === 0 ? (
-                  <tr><td colSpan="7" className="empty-row">Koi provider nahi mila</td></tr>
+                  <tr><td colSpan="7" className="empty-row">No providers found</td></tr>
                 ) : filtered.map(p => {
                   const isProcessing = actionId === p._id;
                   const approved = p.isApproved;

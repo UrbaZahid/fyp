@@ -67,7 +67,7 @@ const BookingRequests = () => {
       // Sirf Pending dikhaao
       setBookings(data.bookings.filter((b) => b.status === 'Pending'));
     } catch (err) {
-      setError(err.response?.data?.message || 'Requests load nahi ho sake.');
+      setError(err.response?.data?.message || 'Could not load booking requests. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -101,7 +101,7 @@ const BookingRequests = () => {
 
           <div className="req-page-header">
             <h2>Booking Requests</h2>
-            <p className="req-subtitle">Naye booking requests yahan aate hain — Accept ya Reject karein</p>
+            <p className="req-subtitle">New booking requests appear here — Accept or Reject them</p>
           </div>
 
           {/* Loading */}

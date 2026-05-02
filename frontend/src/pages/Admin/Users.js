@@ -25,7 +25,7 @@ const AdminUsers = () => {
   useEffect(() => { fetchUsers(); }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Is user ko delete karna chahte hain?')) return;
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
       await API.delete(`/admin/users/${id}`);
       setUsers(users.filter(u => u._id !== id));
@@ -45,7 +45,7 @@ const AdminUsers = () => {
         <div className="users-header">
           <div className="header-text">
             <h1 className="page-main-title">Manage Users</h1>
-            <p className="page-subtitle">Platform customers ka record</p>
+            <p className="page-subtitle">Overview of all platform customers</p>
           </div>
           <span className="total-badge">{users.length} Total Users</span>
         </div>
@@ -78,7 +78,7 @@ const AdminUsers = () => {
               </thead>
               <tbody>
                 {filtered.length === 0 ? (
-                  <tr><td colSpan="6" className="empty-row">Koi user nahi mila</td></tr>
+                  <tr><td colSpan="6" className="empty-row">No users found</td></tr>
                 ) : filtered.map(u => (
                   <tr key={u._id} className="table-row">
                     <td className="user-name-cell">{u.name}</td>

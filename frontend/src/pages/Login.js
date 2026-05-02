@@ -6,11 +6,23 @@ import API from '../api/api';
 import './Login.css';
 
 const Login = ({ setRole }) => {
-  const [role, setLocalRole] = useState('Customer');
-  const [email, setEmail]       = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError]       = useState('');
-  const [loading, setLoading]   = useState(false);
+  const [role, setLocalRole]        = useState('Customer');
+  const [email, setEmail]           = useState('');
+  const [password, setPassword]     = useState('');
+  const [error, setError]           = useState('');
+  const [loading, setLoading]       = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Forgot password state
+  const [showForgot, setShowForgot]         = useState(false);
+  const [forgotEmail, setForgotEmail]       = useState('');
+  const [forgotStep, setForgotStep]         = useState('email'); // 'email' | 'reset'
+  const [newPassword, setNewPassword]       = useState('');
+  const [confirmNew, setConfirmNew]         = useState('');
+  const [forgotError, setForgotError]       = useState('');
+  const [forgotSuccess, setForgotSuccess]   = useState('');
+  const [forgotLoading, setForgotLoading]   = useState(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,14 +33,10 @@ const Login = ({ setRole }) => {
     try {
       const { data } = await API.post('/auth/login', { email, password });
 
-      // Token aur user localStorage mein save karo
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-
-      // App.js ka role state update karo
       setRole(data.user.role);
 
-      // Role ke hisaab se redirect karo
       if (data.user.role === 'admin') {
         navigate('/admin/dashboard');
       } else if (data.user.role === 'provider') {
@@ -36,12 +44,64 @@ const Login = ({ setRole }) => {
       } else {
         navigate('/customer/dashboard');
       }
-
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Try again.');
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
+  };
+
+  // Step 1: verify email exists
+  const handleForgotEmailSubmit = async () => {
+    setForgotError('');
+    if (!forgotEmail) return setForgotError('Please enter your email.');
+    setForgotLoading(true);
+    try {
+      await API.post('/auth/forgot-password/verify-email', { email: forgotEmail });
+      setForgotStep('reset');
+    } catch (err) {
+      setForgotError(err.response?.data?.message || 'No account found with this email.');
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
+  // Step 2: set new password
+  const handleResetPassword = async () => {
+    setForgotError('');
+    if (!newPassword || !confirmNew) return setForgotError('Please fill in both fields.');
+    if (newPassword.length < 6) return setForgotError('Password must be at least 6 characters.');
+    if (newPassword !== confirmNew) return setForgotError('Passwords do not match.');
+    setForgotLoading(true);
+    try {
+      await API.post('/auth/forgot-password/reset', {
+        email: forgotEmail,
+        newPassword,
+      });
+      setForgotSuccess('Password reset successfully! You can now log in.');
+      setTimeout(() => {
+        setShowForgot(false);
+        setForgotStep('email');
+        setForgotEmail('');
+        setNewPassword('');
+        setConfirmNew('');
+        setForgotSuccess('');
+      }, 2500);
+    } catch (err) {
+      setForgotError(err.response?.data?.message || 'Failed to reset password. Please try again.');
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
+  const closeForgot = () => {
+    setShowForgot(false);
+    setForgotStep('email');
+    setForgotEmail('');
+    setNewPassword('');
+    setConfirmNew('');
+    setForgotError('');
+    setForgotSuccess('');
   };
 
   return (
@@ -51,7 +111,6 @@ const Login = ({ setRole }) => {
           <h2>Welcome Back</h2>
           <p className="subtitle">Sign in to your account</p>
 
-          {/* Error Message */}
           {error && (
             <div style={{
               background: '#fee2e2', color: '#dc2626',
@@ -79,13 +138,6 @@ const Login = ({ setRole }) => {
               >
                 <span className="role-icon">💼</span> Provider
               </button>
-              <button
-                type="button"
-                className={role === 'Admin' ? 'active' : ''}
-                onClick={() => setLocalRole('Admin')}
-              >
-                <span className="role-icon">🛡️</span> Admin
-              </button>
             </div>
           </div>
 
@@ -104,17 +156,29 @@ const Login = ({ setRole }) => {
             <div className="input-group">
               <div className="label-row">
                 <label>Password</label>
-                <button className="forgot-pass" onClick={() => {}}>Forgot password?</button>
+                <button
+                  type="button"
+                  className="forgot-pass"
+                  onClick={() => setShowForgot(true)}
+                >
+                  Forgot password?
+                </button>
               </div>
               <div className="password-wrapper">
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <span className="eye-icon">👁️</span>
+                <span
+                  className="eye-icon"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </span>
               </div>
             </div>
 
@@ -129,7 +193,148 @@ const Login = ({ setRole }) => {
         </div>
       </div>
 
-      {/* Footer — same as before */}
+      {/* ── Forgot Password Modal ─────────────────────────────── */}
+      {showForgot && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: '#fff', borderRadius: '16px', padding: '32px',
+            width: '100%', maxWidth: '420px', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+            position: 'relative'
+          }}>
+            <button
+              onClick={closeForgot}
+              style={{
+                position: 'absolute', top: '16px', right: '16px',
+                background: 'none', border: 'none', fontSize: '20px',
+                cursor: 'pointer', color: '#64748b'
+              }}
+            >✕</button>
+
+            <h3 style={{ marginBottom: '6px', color: '#1e293b', fontSize: '20px', fontWeight: '700' }}>
+              Reset Password
+            </h3>
+            <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '24px' }}>
+              {forgotStep === 'email'
+                ? 'Enter your registered email address.'
+                : `Enter a new password for ${forgotEmail}`}
+            </p>
+
+            {forgotError && (
+              <div style={{
+                background: '#fee2e2', color: '#dc2626', padding: '10px 14px',
+                borderRadius: '8px', marginBottom: '16px', fontSize: '14px'
+              }}>
+                {forgotError}
+              </div>
+            )}
+            {forgotSuccess && (
+              <div style={{
+                background: '#dcfce7', color: '#166534', padding: '10px 14px',
+                borderRadius: '8px', marginBottom: '16px', fontSize: '14px'
+              }}>
+                {forgotSuccess}
+              </div>
+            )}
+
+            {forgotStep === 'email' && (
+              <>
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '14px', color: '#374151' }}>
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="you@example.com"
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    style={{
+                      width: '100%', padding: '10px 14px', borderRadius: '8px',
+                      border: '1.5px solid #d1d5db', fontSize: '14px', outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+                <button
+                  onClick={handleForgotEmailSubmit}
+                  disabled={forgotLoading}
+                  style={{
+                    width: '100%', padding: '12px', background: '#4f46e5',
+                    color: '#fff', border: 'none', borderRadius: '8px',
+                    fontWeight: '600', fontSize: '15px', cursor: 'pointer'
+                  }}
+                >
+                  {forgotLoading ? 'Checking...' : 'Continue'}
+                </button>
+              </>
+            )}
+
+            {forgotStep === 'reset' && (
+              <>
+                <div style={{ marginBottom: '14px' }}>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '14px', color: '#374151' }}>
+                    New Password
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="Min 6 characters"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    style={{
+                      width: '100%', padding: '10px 14px', borderRadius: '8px',
+                      border: '1.5px solid #d1d5db', fontSize: '14px', outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px', fontSize: '14px', color: '#374151' }}>
+                    Confirm New Password
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="Repeat password"
+                    value={confirmNew}
+                    onChange={(e) => setConfirmNew(e.target.value)}
+                    style={{
+                      width: '100%', padding: '10px 14px', borderRadius: '8px',
+                      border: '1.5px solid #d1d5db', fontSize: '14px', outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button
+                    onClick={() => { setForgotStep('email'); setForgotError(''); }}
+                    style={{
+                      flex: 1, padding: '12px', background: '#f1f5f9',
+                      color: '#374151', border: 'none', borderRadius: '8px',
+                      fontWeight: '600', fontSize: '14px', cursor: 'pointer'
+                    }}
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={handleResetPassword}
+                    disabled={forgotLoading}
+                    style={{
+                      flex: 2, padding: '12px', background: '#4f46e5',
+                      color: '#fff', border: 'none', borderRadius: '8px',
+                      fontWeight: '600', fontSize: '15px', cursor: 'pointer'
+                    }}
+                  >
+                    {forgotLoading ? 'Saving...' : 'Reset Password'}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       <footer className="main-footer">
         <div className="footer-grid">
           <div className="footer-brand">
@@ -160,7 +365,7 @@ const Login = ({ setRole }) => {
             <h4>Contact Us</h4>
             <p className="contact-info">📧 support@fixit.com</p>
             <p className="contact-info">📞 +92 300-1234567</p>
-            <p className="contact-info">📍 Lahore, Pakistan</p>
+            <p className="contact-info">📍 Gujranwala, Pakistan</p>
           </div>
         </div>
         <div className="footer-bottom">

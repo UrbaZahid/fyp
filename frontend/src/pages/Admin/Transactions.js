@@ -19,7 +19,7 @@ const AdminTransactions = () => {
       const { data } = await API.get("/admin/transactions");
       setTransactions(data.transactions || []);
     } catch (err) {
-      setError(err.response?.data?.message || "Transactions load nahi ho sake.");
+      setError(err.response?.data?.message || "Could not load transactions. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -123,7 +123,7 @@ const AdminTransactions = () => {
                 textAlign: "center", padding: "60px", color: "#64748b"
               }}>
                 <div style={{ fontSize: "40px", marginBottom: "12px" }}>💳</div>
-                <p>Koi transaction nahi mili</p>
+                <p>No transactions found</p>
               </div>
             ) : (
               <table className="txn-data-table">

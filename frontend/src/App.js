@@ -36,6 +36,18 @@ import AdminReports from './pages/Admin/Reports';
 import CustomerNavbar from './components/CustomerNavbar';
 import API from './api/api';
 
+// ─── Helper: read role from localStorage safely ────────────────
+const getRoleFromStorage = () => {
+  try {
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    const token = localStorage.getItem('token');
+    if (!token || !user) return null;
+    return user.role || null;
+  } catch {
+    return null;
+  }
+};
+
 // ─── Protected Route ──────────────────────────────────────────
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = localStorage.getItem('token');
@@ -60,97 +72,61 @@ function AppContent({ role, setRole }) {
       )}
 
       <Routes>
-        {/* ── Public Routes ───────────────────── */}
         <Route path="/"         element={<Hero />} />
         <Route path="/login"    element={<Login setRole={setRole} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/services" element={<Services />} />
         <Route path="/services/:serviceName" element={<ServiceDetails />} />
 
-        {/* ── Customer Routes ─────────────────── */}
         <Route path="/customer/dashboard" element={
-          <ProtectedRoute allowedRoles={['customer']}>
-            <CustomerDashboard />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['customer']}><CustomerDashboard /></ProtectedRoute>
         } />
         <Route path="/customer/bookings" element={
-          <ProtectedRoute allowedRoles={['customer']}>
-            <MyBookings />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['customer']}><MyBookings /></ProtectedRoute>
         } />
         <Route path="/customer/profile" element={
-          <ProtectedRoute allowedRoles={['customer']}>
-            <CustomerProfile />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['customer']}><CustomerProfile /></ProtectedRoute>
         } />
         <Route path="/book/:serviceName/:providerId" element={
-          <ProtectedRoute allowedRoles={['customer']}>
-            <BookingPage />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['customer']}><BookingPage /></ProtectedRoute>
         } />
 
-        {/* ── Provider Routes ─────────────────── */}
         <Route path="/provider/dashboard" element={
-          <ProtectedRoute allowedRoles={['provider']}>
-            <ProviderDashboard />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['provider']}><ProviderDashboard /></ProtectedRoute>
         } />
         <Route path="/provider/requests" element={
-          <ProtectedRoute allowedRoles={['provider']}>
-            <BookingRequests />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['provider']}><BookingRequests /></ProtectedRoute>
         } />
         <Route path="/provider/history" element={
-          <ProtectedRoute allowedRoles={['provider']}>
-            <ProviderBookingHistory />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['provider']}><ProviderBookingHistory /></ProtectedRoute>
         } />
         <Route path="/provider/profile" element={
-          <ProtectedRoute allowedRoles={['provider']}>
-            <ProviderProfile />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['provider']}><ProviderProfile /></ProtectedRoute>
         } />
 
-        {/* ── Admin Routes ─────────────────────── */}
         <Route path="/admin/dashboard" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminDashboard />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>
         } />
         <Route path="/admin/users" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminUsers />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin']}><AdminUsers /></ProtectedRoute>
         } />
         <Route path="/admin/providers" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminProviders />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin']}><AdminProviders /></ProtectedRoute>
         } />
         <Route path="/admin/categories" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminCategories />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin']}><AdminCategories /></ProtectedRoute>
         } />
         <Route path="/admin/areas" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminAreas />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin']}><AdminAreas /></ProtectedRoute>
         } />
         <Route path="/admin/bookings" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminBookings />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin']}><AdminBookings /></ProtectedRoute>
         } />
         <Route path="/admin/transactions" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminTransactions />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin']}><AdminTransactions /></ProtectedRoute>
         } />
         <Route path="/admin/reports" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminReports />
-          </ProtectedRoute>
+          <ProtectedRoute allowedRoles={['admin']}><AdminReports /></ProtectedRoute>
         } />
       </Routes>
     </>
@@ -158,16 +134,9 @@ function AppContent({ role, setRole }) {
 }
 
 function App() {
-  // Read role from localStorage on first render
-  const [role, setRole] = useState(() => {
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
-    return user?.role || null;
-  });
+  const [role, setRole] = useState(getRoleFromStorage);
 
-  // ── On startup: validate stored token against the backend ────
-  // If the token is expired/invalid the server returns 401 which
-  // the API interceptor handles (clears localStorage + redirects).
-  // Here we just sync the role state to reflect a cleared token.
+  // On mount: validate token with backend and sync role
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -177,18 +146,35 @@ function App() {
 
     API.get('/auth/me')
       .then(({ data }) => {
-        // Token valid — keep role in sync (handles stale role mismatches)
         setRole(data.user.role);
+        localStorage.setItem('user', JSON.stringify(data.user));
       })
       .catch(() => {
-        // 401 or network error — interceptor already cleared localStorage
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setRole(null);
       });
-  }, []); // runs once on app mount
+  }, []);
+
+  // Listen for localStorage changes (cross-tab logout / manual clear)
+  useEffect(() => {
+    const syncRole = () => setRole(getRoleFromStorage());
+    window.addEventListener('storage', syncRole);
+    return () => window.removeEventListener('storage', syncRole);
+  }, []);
+
+  // Wrapped setRole: clears storage when logging out
+  const handleSetRole = (newRole) => {
+    if (newRole === null) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+    setRole(newRole);
+  };
 
   return (
     <Router>
-      <AppContent role={role} setRole={setRole} />
+      <AppContent role={role} setRole={handleSetRole} />
     </Router>
   );
 }

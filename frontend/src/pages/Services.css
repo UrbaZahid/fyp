@@ -115,3 +115,16 @@
 .book-now-btn:hover {
   background: #1d4ed8;
 }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .services-page { padding: 24px 16px 40px !important; }
+  .services-header h1 { font-size: 22px !important; }
+  .services-search-bar { flex-direction: column; gap: 10px; }
+  .services-search-bar input,
+  .services-search-bar select { width: 100% !important; }
+  .services-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+}
+@media (max-width: 480px) {
+  .services-grid { grid-template-columns: 1fr !important; }
+}

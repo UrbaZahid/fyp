@@ -185,3 +185,11 @@
 .reject-btn:hover:not(:disabled) { background: #dc2626; }
 .accept-btn:hover:not(:disabled) { background: #16a34a; }
 .reject-btn:disabled, .accept-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .requests-content { padding: 16px !important; padding-top: 64px !important; }
+  .request-card { flex-direction: column !important; gap: 12px; padding: 16px !important; }
+  .request-actions { flex-direction: row; width: 100%; }
+  .request-actions button { flex: 1; }
+  .req-title { font-size: 18px !important; }
+}

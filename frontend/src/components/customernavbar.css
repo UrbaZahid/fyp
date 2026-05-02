@@ -114,3 +114,69 @@
   padding: 6px 12px;
   border-radius: 20px;
 }
+/* ══════════════════════════════════════════════
+   RESPONSIVE NAVBAR
+   ══════════════════════════════════════════════ */
+
+/* Tablet: tighter padding */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0 20px;
+  }
+  .nav-links a {
+    font-size: 13px;
+    padding: 5px 9px;
+  }
+}
+
+/* Mobile: wrap to two lines */
+@media (max-width: 640px) {
+  .navbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 16px;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-area {
+    flex: 1;
+  }
+
+  .logo-name {
+    font-size: 17px;
+  }
+
+  /* Nav links wrap to second row, full width */
+  .nav-links {
+    order: 3;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 4px 0 6px;
+    border-top: 1px solid #f3f4f6;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+
+  .nav-auth {
+    gap: 6px;
+  }
+
+  .login-link,
+  .register-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .register-btn span {
+    display: none;
+  }
+}

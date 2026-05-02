@@ -86,3 +86,11 @@
 .register-link { margin-top: 25px; font-size: 14px; color: #6b7280; }
 .register-link a { color: #2563eb; text-decoration: none; font-weight: 700; }
 
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .login-card { margin: 12px !important; padding: 22px 16px !important; }
+  .login-card h2 { font-size: 22px; }
+  /* Login has 2 role buttons now (Customer/Provider) — keep them side by side */
+  .role-buttons { grid-template-columns: 1fr 1fr; gap: 8px; }
+}

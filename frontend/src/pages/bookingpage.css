@@ -328,3 +328,9 @@
     display: none;
   }
 }
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .booking-container { padding: 20px 14px !important; }
+  .form-grid { grid-template-columns: 1fr !important; }
+  .booking-summary-card { padding: 16px !important; }
+}

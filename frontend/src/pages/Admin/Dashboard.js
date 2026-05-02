@@ -11,17 +11,9 @@ const AdminDashboard = () => {
   const [error, setError]           = useState('');
   const [activeBar, setActiveBar]   = useState(null);
 
-  // ─── Static chart data (visual only) ──────────────────────
-  const chartData = [
-    { month: 'Jan', bookings: 45, h: '38%' },
-    { month: 'Feb', bookings: 62, h: '52%' },
-    { month: 'Mar', bookings: 78, h: '65%' },
-    { month: 'Apr', bookings: 90, h: '75%' },
-    { month: 'May', bookings: 110, h: '92%' },
-    { month: 'Jun', bookings: 95, h: '80%' },
-  ];
+  const [chartData, setChartData] = useState([]);
 
-  // ─── Fetch stats + recent bookings ────────────────────────
+  // ─── Fetch stats + recent bookings + monthly data ─────────
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,9 +27,32 @@ const AdminDashboard = () => {
 
         setStats(statsRes.data);
 
-        // Show only the most recent 4 bookings in the table
         const all = bookingsRes.data.bookings || [];
         setRecent(all.slice(0, 4));
+
+        // Build monthly chart data from real bookings
+        const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const counts = {};
+        all.forEach(b => {
+          const d = new Date(b.createdAt);
+          const key = `${d.getFullYear()}-${d.getMonth()}`;
+          counts[key] = (counts[key] || 0) + 1;
+        });
+
+        // Last 6 months
+        const now = new Date();
+        const months = [];
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          const key = `${d.getFullYear()}-${d.getMonth()}`;
+          months.push({ month: monthNames[d.getMonth()], bookings: counts[key] || 0 });
+        }
+        const maxVal = Math.max(...months.map(m => m.bookings), 1);
+        setChartData(months.map(m => ({
+          ...m,
+          h: `${Math.round((m.bookings / maxVal) * 90) + 5}%`,
+        })));
+
       } catch (err) {
         setError('Failed to load dashboard data.');
       } finally {

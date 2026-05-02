@@ -23,3 +23,142 @@ code {
 #root {
   min-height: 100vh;
 }
+
+/* ══════════════════════════════════════════════
+   GLOBAL RESPONSIVE TYPOGRAPHY & UTILITIES
+   ══════════════════════════════════════════════ */
+
+/* Fluid base font — smaller on mobile */
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  html { font-size: 14px; }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 13px; }
+}
+
+/* Prevent horizontal overflow */
+body {
+  overflow-x: hidden;
+}
+
+/* Images scale down */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Hero page responsive ── */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: clamp(1.6rem, 6vw, 2.8rem) !important;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(0.85rem, 3.5vw, 1rem) !important;
+  }
+
+  .hero-stats {
+    flex-wrap: wrap;
+    gap: 12px !important;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .hero-btns {
+    flex-direction: column;
+    gap: 10px !important;
+    align-items: center;
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .steps-container {
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+
+  .step-divider {
+    display: none !important;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .cta-flex-btns {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .services-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Provider layout responsive ── */
+@media (max-width: 768px) {
+  .provider-layout {
+    flex-direction: column;
+  }
+
+  .p-main {
+    margin-left: 0 !important;
+  }
+}
+
+/* ── Login / Register pages ── */
+@media (max-width: 600px) {
+  .login-card,
+  .register-card {
+    margin: 16px !important;
+    padding: 24px 20px !important;
+    border-radius: 16px !important;
+  }
+
+  .role-buttons {
+    gap: 8px !important;
+  }
+
+  .two-col-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Service details / providers grid ── */
+@media (max-width: 768px) {
+  .providers-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .filters-bar {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+}

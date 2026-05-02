@@ -17,7 +17,7 @@ const AdminBookings = () => {
       const { data } = await API.get("/bookings/admin/all");
       setBookings(data.bookings || []);
     } catch (err) {
-      setError(err.response?.data?.message || "Bookings load nahi ho sake.");
+      setError(err.response?.data?.message || "Could not load bookings. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ const AdminBookings = () => {
                 color: "#64748b"
               }}>
                 <div style={{ fontSize: "40px", marginBottom: "12px" }}>📭</div>
-                <p>Koi booking nahi mili</p>
+                <p>No bookings found</p>
               </div>
             ) : (
               <table className="bookings-data-table">

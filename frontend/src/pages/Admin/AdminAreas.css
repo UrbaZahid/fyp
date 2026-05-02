@@ -255,3 +255,10 @@
   background: #94a3b8;
   cursor: not-allowed;
 }
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .areas-data-table { font-size: 12px; }
+  .areas-data-table th,
+  .areas-data-table td { padding: 10px 8px; }
+  .areas-top-bar { flex-direction: column; gap: 10px; }
+}

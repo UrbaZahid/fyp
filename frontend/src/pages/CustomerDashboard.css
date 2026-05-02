@@ -229,3 +229,10 @@
     text-align: left;
   }
 }
+
+/* ── Additional responsive fixes ── */
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: 1fr !important; }
+  .dashboard-content { padding: 16px !important; padding-top: 64px !important; }
+  h2 { font-size: 18px !important; }
+}

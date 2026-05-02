@@ -371,3 +371,9 @@
     width: 100%;
   }
 }
+/* ── Additional responsive fixes ── */
+@media (max-width: 768px) {
+  .my-bookings-content { padding: 16px !important; padding-top: 64px !important; }
+  .booking-detail-grid { grid-template-columns: 1fr !important; }
+  .booking-card-header { flex-direction: column; gap: 8px; }
+}

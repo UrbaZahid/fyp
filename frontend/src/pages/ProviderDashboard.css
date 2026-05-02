@@ -241,16 +241,19 @@
 @media (max-width: 768px) {
   .p-stats-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 
-  .p-sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-  }
-
+  /* Main area: no sidebar margin on mobile (sidebar slides over) */
   .p-main {
-    margin-left: 0;
+    margin-left: 0 !important;
+    width: 100%;
+  }
+
+  /* Top padding so hamburger button doesn't overlap header */
+  .p-content-inner {
+    padding: 20px 16px;
+    padding-top: 70px;
   }
 
   .p-booking-item {
@@ -261,5 +264,19 @@
 
   .p-right {
     align-items: flex-start;
+  }
+
+  .p-header h2 {
+    font-size: 18px;
+  }
+
+  .p-stat-card h4 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .p-stats-grid {
+    grid-template-columns: 1fr;
   }
 }

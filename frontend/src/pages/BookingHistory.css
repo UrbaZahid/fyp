@@ -21,3 +21,9 @@
 
 .view-detail-btn { background: #f1f5f9; border: none; padding: 6px 12px; border-radius: 6px; color: #475569; font-weight: 600; cursor: pointer; transition: 0.2s; }
 .view-detail-btn:hover { background: #e2e8f0; }
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .history-content { padding: 16px !important; padding-top: 64px !important; }
+  .history-card { flex-direction: column !important; gap: 10px; padding: 14px !important; }
+  .history-right { align-items: flex-start !important; }
+}

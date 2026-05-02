@@ -21,7 +21,7 @@ const ProviderBookingHistory = () => {
         const { data } = await API.get('/bookings/history');
         setBookings(data.bookings || []);
       } catch (err) {
-        setError(err.response?.data?.message || 'History load nahi ho saki.');
+        setError(err.response?.data?.message || 'Could not load booking history. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -47,7 +47,7 @@ const ProviderBookingHistory = () => {
 
           <div className="req-page-header">
             <h2>Booking History</h2>
-            <p className="req-subtitle">Completed aur cancelled bookings ka record</p>
+            <p className="req-subtitle">Record of completed and cancelled bookings</p>
           </div>
 
           {/* Filters */}
@@ -84,8 +84,8 @@ const ProviderBookingHistory = () => {
           {!loading && !error && filtered.length === 0 && (
             <div className="req-empty">
               <div className="req-empty-icon">📂</div>
-              <h3>Koi record nahi mila</h3>
-              <p>Ab tak koi completed ya cancelled booking nahi hai.</p>
+              <h3>No records found</h3>
+              <p>No completed or cancelled bookings yet.</p>
             </div>
           )}
 

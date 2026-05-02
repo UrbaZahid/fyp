@@ -33,3 +33,17 @@
   cursor: pointer;
 }
 .link-text:hover { text-decoration: underline; }
+/* ── Responsive: horizontal scroll ── */
+@media (max-width: 900px) {
+  .txn-table-card {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .txn-data-table {
+    min-width: 600px;
+  }
+}
+@media (max-width: 768px) {
+  .txn-top-bar { flex-direction: column; gap: 10px; }
+  .txn-search-input { width: 100%; }
+}
