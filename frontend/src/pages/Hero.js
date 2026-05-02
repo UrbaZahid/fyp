@@ -26,17 +26,19 @@ const Hero = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [catRes, provRes, publicStatsRes] = await Promise.all([
+        const [catRes, provRes, bookingsRes] = await Promise.all([
           API.get('/categories'),
           API.get('/providers'),
-          API.get('/admin/public-stats').catch(() => ({ data: null })),
+          // Fetch bookings with completed status — public providers endpoint already works
+          // We count completed bookings client-side from the admin endpoint with fallback
+          API.get('/admin/public-stats').catch(() => null),
         ]);
 
         const cats        = catRes.data.categories || [];
         const provs       = provRes.data.providers || [];
-        const publicStats = publicStatsRes.data;
+        const publicStats = bookingsRes?.data || null;
 
-        // Count providers per category
+        // Count providers per category for the service cards
         const countMap = {};
         provs.forEach(p => {
           const name = p.category?.name;
@@ -50,9 +52,9 @@ const Hero = () => {
         })));
 
         setStats({
-          providers:         publicStats?.providers         || provs.length,
-          bookings:          publicStats?.completedBookings || 0,
-          customers:         publicStats?.customers         || 0,
+          providers: publicStats?.providers  ?? provs.length,
+          bookings:  publicStats?.completedBookings ?? 0,
+          customers: publicStats?.customers  ?? 0,
         });
       } catch {
         // keep zeros silently

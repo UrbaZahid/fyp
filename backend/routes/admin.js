@@ -251,7 +251,7 @@ router.get('/reports', adminOnly, async (req, res) => {
             as: 'provider',
           },
         },
-        { $unwind: { path: '$provider', preserveNullAndEmpty: true } },
+        { $unwind: { path: '$provider', preserveNullAndEmptyArrays: true } },
         {
           $lookup: {
             from: 'users',
@@ -260,7 +260,7 @@ router.get('/reports', adminOnly, async (req, res) => {
             as: 'providerUser',
           },
         },
-        { $unwind: { path: '$providerUser', preserveNullAndEmpty: true } },
+        { $unwind: { path: '$providerUser', preserveNullAndEmptyArrays: true } },
         {
           $project: {
             totalBookings: 1,
