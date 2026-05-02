@@ -229,7 +229,6 @@ router.get('/reports', adminOnly, async (req, res) => {
       completedBookings,
       rejectedBookings,
       payments,
-      topProviders,
     ] = await Promise.all([
       Booking.countDocuments(),
       Booking.countDocuments({ status: 'Pending' }),
@@ -237,41 +236,39 @@ router.get('/reports', adminOnly, async (req, res) => {
       Booking.countDocuments({ status: 'Completed' }),
       Booking.countDocuments({ status: 'Rejected' }),
       Payment.find({ status: 'completed' }),
+    ]);
 
-      // Top 5 providers by total bookings — populate user name
-      Booking.aggregate([
+    // Run aggregate separately so its error doesn't kill the whole route
+    let topProviders = [];
+    try {
+      const raw = await Booking.aggregate([
         { $group: { _id: '$provider', totalBookings: { $sum: 1 } } },
         { $sort: { totalBookings: -1 } },
         { $limit: 5 },
-        {
-          $lookup: {
-            from: 'providers',
-            localField: '_id',
-            foreignField: '_id',
-            as: 'provider',
-          },
-        },
-        { $unwind: { path: '$provider', preserveNullAndEmptyArrays: true } },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'provider.user',
-            foreignField: '_id',
-            as: 'providerUser',
-          },
-        },
-        { $unwind: { path: '$providerUser', preserveNullAndEmptyArrays: true } },
-        {
-          $project: {
-            totalBookings: 1,
-            'provider.name': '$providerUser.name',
-            'provider.email': '$providerUser.email',
-          },
-        },
-      ]),
-    ]);
+      ]);
 
-    const totalRevenue = payments.reduce((sum, p) => sum + p.amount, 0);
+      // Manually populate provider -> user name (avoids complex aggregate joins)
+      const populated = await Promise.all(
+        raw.map(async (item) => {
+          try {
+            const provider = await Provider.findById(item._id).populate('user', 'name email');
+            return {
+              totalBookings: item.totalBookings,
+              providerName:  provider?.user?.name  || 'Unknown',
+              providerEmail: provider?.user?.email || '',
+            };
+          } catch {
+            return { totalBookings: item.totalBookings, providerName: 'Unknown', providerEmail: '' };
+          }
+        })
+      );
+      topProviders = populated;
+    } catch (aggErr) {
+      console.error('topProviders aggregate error:', aggErr.message);
+      // topProviders stays [] — non-fatal
+    }
+
+    const totalRevenue = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
 
     res.json({
       bookingSummary: {
@@ -285,12 +282,10 @@ router.get('/reports', adminOnly, async (req, res) => {
         total:         totalRevenue,
         totalPayments: payments.length,
       },
-      topProviders: topProviders.map(p => ({
-        totalBookings: p.totalBookings,
-        provider: [{ user: { name: p.provider?.name || 'Unknown', email: p.provider?.email || '' } }],
-      })),
+      topProviders,
     });
   } catch (error) {
+    console.error('Reports route error:', error.message);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });

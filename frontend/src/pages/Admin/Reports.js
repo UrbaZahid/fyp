@@ -84,11 +84,11 @@ const AdminReports = () => {
             ) : (
               <div className="h-bar-container">
                 {topProviders.map((item, idx) => {
-                  const name = item.provider?.[0]?.user?.name || `Provider ${idx + 1}`;
+                  const name = item.providerName || item.provider?.[0]?.user?.name || `Provider ${idx + 1}`;
                   return (
                     <div key={idx} className="h-bar-row">
                       <span className="h-label" title={name}>
-                        {name.length > 12 ? name.slice(0, 12) + "…" : name}
+                        {name.length > 14 ? name.slice(0, 14) + "…" : name}
                       </span>
                       <div className="h-track">
                         <div className="h-fill" style={{ width: `${Math.round((item.totalBookings / maxProv) * 100)}%` }}></div>
