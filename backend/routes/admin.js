@@ -304,6 +304,22 @@ const adminOnly = [protect, authorize('admin')];
 // DASHBOARD STATS
 // ════════════════════════════════════════
 
+// ─── @route  GET /api/admin/public-stats ──────────────────────
+// @desc    Public stats for the home page (no auth required)
+// Returns: verified provider count, completed bookings, registered customers
+router.get('/public-stats', async (req, res) => {
+  try {
+    const [providers, completedBookings, customers] = await Promise.all([
+      User.countDocuments({ role: 'provider' }),
+      Booking.countDocuments({ status: 'Completed' }),
+      User.countDocuments({ role: 'customer' }),
+    ]);
+    res.json({ providers, completedBookings, customers });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 // ─── @route  GET /api/admin/stats ─────────────────────────────
 // @desc    Admin dashboard ke liye overall stats
 // @access  Admin only
