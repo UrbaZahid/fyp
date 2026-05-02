@@ -1,6 +1,8 @@
+
 const express  = require('express');
 const router   = express.Router();
 const jwt      = require('jsonwebtoken');
+const bcrypt   = require('bcryptjs');
 const User     = require('../models/User');
 const Provider = require('../models/Provider');
 const { protect } = require('../middleware/auth');
@@ -42,7 +44,6 @@ router.post('/register', async (req, res) => {
       area: role === 'customer' ? area : '',
     });
 
-    // ── Provider ke liye Provider document banao ──
     if (user.role === 'provider') {
       await Provider.create({
         user:         user._id,
@@ -55,11 +56,10 @@ router.post('/register', async (req, res) => {
       });
 
       return res.status(201).json({
-        message: 'Provider registered! Admin approval ke baad login kar sakte hain.',
+        message: 'Provider registered! You can log in after admin approval.',
       });
     }
 
-    // Customer — token do
     const token = generateToken(user._id);
     res.status(201).json({
       message: 'Registered successfully',
@@ -80,7 +80,6 @@ router.post('/register', async (req, res) => {
 });
 
 // ─── @route  POST /api/auth/login ─────────────────────────────
-// FIXED: Provider ko login karne do — isApproved status token ke saath bhejna
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -94,15 +93,6 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-
-    // Provider ka isApproved check — lekin block mat karo, sirf status bheho
-    // Frontend dashboard par warning show karega
-    // NOTE: Agar aap strict blocking chahte hain toh yeh comment uncomment karo:
-    // if (user.role === 'provider' && !user.isApproved) {
-    //   return res.status(403).json({
-    //     message: 'Your account is pending admin approval. Please wait.',
-    //   });
-    // }
 
     const token = generateToken(user._id);
 
@@ -169,6 +159,66 @@ router.put('/profile', protect, async (req, res) => {
         phone: updatedUser.phone,
       },
     });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// ─── @route  POST /api/auth/forgot-password/verify-email ──────
+// Step 1: Check if the email exists in the database.
+// No OTP or email sending — just confirms the account exists
+// so the frontend can proceed to the password reset step.
+router.post('/forgot-password/verify-email', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      return res.status(404).json({ message: 'No account found with this email.' });
+    }
+
+    // Do not reveal sensitive info — just confirm the account exists
+    res.json({ message: 'Email verified. You may now reset your password.' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// ─── @route  POST /api/auth/forgot-password/reset ─────────────
+// Step 2: Update the user's password directly.
+// Since there is no email verification / OTP in this system,
+// we accept email + newPassword and update immediately.
+router.post('/forgot-password/reset', async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    if (!email || !newPassword) {
+      return res.status(400).json({ message: 'Email and new password are required.' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters.' });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      return res.status(404).json({ message: 'No account found with this email.' });
+    }
+
+    // Set new password — the pre('save') hook in User model
+    // will automatically hash it before saving
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ message: 'Password reset successfully. You can now log in.' });
 
   } catch (error) {
     console.error(error);
