@@ -157,7 +157,7 @@
   .navbar { flex-wrap: wrap; height: auto; padding: 10px 16px; gap: 8px; }
   .logo-area { flex: 1; }
   .logo-name { font-size: 18px; }
-  .nav-links { order: 3; width: 100%; flex-wrap: wrap; gap: 2px; padding: 6px 0 8px; border-top: 1px solid #f1f5f9; }
+  .nav-links { order: 3; width: 100%; flex-wrap: wrap; gap: 2px; padding: 6px 0 8px; border-top: 1px solid #f1f5f9; justify-content: center; }
   .nav-links a { font-size: 13px; padding: 5px 10px; }
   .nav-auth { gap: 6px; }
   .login-link, .register-btn { font-size: 12px; padding: 7px 12px; }

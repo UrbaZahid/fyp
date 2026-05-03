@@ -1,10 +1,8 @@
 @import './Hero.css';
 
-/* ══════════════════════════════════════════════
-   SERVICE DETAILS PAGE — Premium Style (Fixed Classes)
-   ══════════════════════════════════════════════ */
-
 .service-details-page {
+  display: flex;
+  flex-direction: column;
   background: #f1f5f9;
   min-height: 100vh;
   animation: fadeInUp 0.4s ease-out;
@@ -50,6 +48,7 @@
   padding: 40px 6%;
   max-width: 1400px;
   margin: 0 auto;
+  flex:1;
 }
 
 .providers-grid {
