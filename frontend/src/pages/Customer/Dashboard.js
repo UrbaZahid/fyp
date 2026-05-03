@@ -59,7 +59,7 @@ const CustomerDashboard = () => {
           {/* Welcome */}
           <section className="welcome-section">
             <h2>Dashboard</h2>
-            <h3>Welcome back, {userName}! 👋</h3>
+            <h3>Welcome back, {userName}! </h3>
             <p>Here's what's happening with your bookings.</p>
           </section>
 

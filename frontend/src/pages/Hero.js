@@ -6,6 +6,7 @@ import './Hero.css';
 
 const Hero = () => {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
 
   const [categories, setCategories] = useState([]);
   const [stats, setStats] = useState({ providers: 0, bookings: 0, customers: 0 });
@@ -80,7 +81,9 @@ const Hero = () => {
         </p>
         <div className="hero-btns">
           <button className="primary-btn" onClick={() => navigate('/services')}>Explore Services →</button>
+           {!user && (
           <button className="secondary-btn" onClick={() => navigate('/register')}>Join as Provider</button>
+           )}
         </div>
 
         <div className="hero-stats">
@@ -164,7 +167,7 @@ const Hero = () => {
       </section>
 
       {/* ── Why Choose (condensed) ── */}
-      <section className="why-choose">
+      <section className={`why-choose ${user ? 'why-choose-loggedin' : ''}`}>
         <h2 className="why-title">Why Choose FixIT</h2>
         <div className="features-grid">
           <div className="feature-card">
@@ -190,7 +193,9 @@ const Hero = () => {
         </div>
       </section>
 
+    
       {/* ── CTA ── */}
+      {!user && (
       <section className="cta-get-started">
         <h2>Ready to Get Started?</h2>
         <p>Join customers or become a service provider in Gujranwala</p>
@@ -199,6 +204,7 @@ const Hero = () => {
           <button className="provider-reg-btn" onClick={() => navigate('/register')}>💼 Become a Provider</button>
         </div>
       </section>
+    )}
      <Footer />
     </div>
   );

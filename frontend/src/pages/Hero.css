@@ -595,3 +595,36 @@
   .services-grid { grid-template-columns: 1fr; }
   .features-grid { grid-template-columns: 1fr; }
 }
+/* Why Choose — logged in version */
+.why-choose-loggedin {
+  background: #fff;
+  color: #0f172a;
+}
+
+.why-choose-loggedin .why-title {
+  color: #0f172a;
+}
+
+.why-choose-loggedin .feature-card {
+  background: #fff;
+  border: 1px solid #ffffff;
+  backdrop-filter: none;
+}
+
+.why-choose-loggedin .feature-card:hover {
+  background: #ffffff;
+  border-color: #ffdddd;
+  box-shadow: 0 12px 32px rgba(236,72,153,0.1);
+}
+
+.why-choose-loggedin .feature-card h3 {
+  color: #0f172a;
+}
+
+.why-choose-loggedin .feature-card p {
+  color: #64748b;
+}
+
+.why-choose-loggedin::before {
+  background: radial-gradient(circle, rgba(236,72,153,0.08) 0%, transparent 70%);
+}

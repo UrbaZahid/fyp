@@ -55,7 +55,7 @@ const ProviderBookingHistory = () => {
             <input
               type="text"
               className="search-input"
-              placeholder="Customer name se search..."
+              placeholder="Search by Customer name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />

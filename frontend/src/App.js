@@ -1,5 +1,5 @@
 // src/App.js
-
+import AdminLogin from './pages/AdminLogin';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 
@@ -77,6 +77,7 @@ function AppContent({ role, setRole }) {
         <Route path="/register" element={<Register />} />
         <Route path="/services" element={<Services />} />
         <Route path="/services/:serviceName" element={<ServiceDetails />} />
+        <Route path="/secure-admin-fx2026/login" element={<AdminLogin setRole={setRole} />} />
 
         <Route path="/customer/dashboard" element={
           <ProtectedRoute allowedRoles={['customer']}><CustomerDashboard /></ProtectedRoute>

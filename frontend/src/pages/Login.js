@@ -25,32 +25,37 @@ const Login = ({ setRole }) => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
 
-    try {
-      const { data } = await API.post('/auth/login', { email, password });
+  try {
+    const { data } = await API.post('/auth/login', { email, password });
 
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      setRole(data.user.role);
-
-      if (data.user.role === 'admin') {
-        navigate('/admin/dashboard');
-      } else if (data.user.role === 'provider') {
-        navigate('/provider/dashboard');
-      } else {
-        navigate('/customer/dashboard');
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
-    } finally {
+    // ── Admin ko regular login se block karo ──
+    if (data.user.role === 'admin') {
+      setError('Access denied. Use the authorized admin portal.');
       setLoading(false);
+      return;
     }
-  };
 
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    setRole(data.user.role);
+
+    if (data.user.role === 'provider') {
+      navigate('/provider/dashboard');
+    } else {
+      navigate('/customer/dashboard');
+    }
+
+  } catch (err) {
+    setError(err.response?.data?.message || 'Login failed. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
   // Step 1: verify email exists
   const handleForgotEmailSubmit = async () => {
     setForgotError('');

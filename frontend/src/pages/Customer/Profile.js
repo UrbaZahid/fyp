@@ -11,6 +11,7 @@ const CustomerProfile = () => {
   const [saving, setSaving]   = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError]     = useState('');
+  const [phoneError, setPhoneError] = useState('');
 
   // ─── Load user data on mount ──────────────────────────────
   useEffect(() => {
@@ -55,6 +56,20 @@ const CustomerProfile = () => {
       setError('Name cannot be empty.');
       return;
     }
+
+    // Phone validation — inline under field
+    if (form.phone) {
+      const digits = form.phone.replace(/\D/g, '');
+      if (!form.phone.startsWith('+92')) {
+        setPhoneError('Phone number must start with +92 (Pakistan).');
+        return;
+      }
+      if (digits.length !== 12) {
+        setPhoneError('Must be exactly 12 digits (e.g. +923001234567).');
+        return;
+      }
+    }
+    setPhoneError('');
 
     try {
       setSaving(true);
@@ -166,13 +181,32 @@ const CustomerProfile = () => {
 
                     {/* Phone */}
                     <div className="form-group">
-                      <label>Phone Number</label>
+                      <label>
+                        Phone Number
+                        {phoneError && (
+                          <span style={{ color: '#dc2626', fontSize: '12px', fontWeight: '600', marginLeft: '6px' }}>
+                            — {phoneError}
+                          </span>
+                        )}
+                      </label>
                       <input
                         type="tel"
                         name="phone"
                         value={form.phone}
-                        onChange={handleChange}
-                        placeholder="+92 300-0000000"
+                        placeholder="+923001234567"
+                        style={phoneError ? { borderColor: '#dc2626', background: '#fff5f5' } : {}}
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          if (!val.startsWith('+92')) {
+                            val = '+92' + val.replace(/^\+?9?2?/, '').replace(/\D/g, '');
+                          }
+                          const digits = val.slice(3).replace(/\D/g, '').slice(0, 10);
+                          val = '+92' + digits;
+                          setForm({ ...form, phone: val });
+                          setSuccess('');
+                          setError('');
+                          if (phoneError) setPhoneError('');
+                        }}
                       />
                     </div>
 
