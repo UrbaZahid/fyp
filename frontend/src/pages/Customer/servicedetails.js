@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import API from '../../api/api';
+import Footer from "../../components/Footer";
 import '../../pages/ServiceDetails.css';
 
 const avatarColors = ['#3b82f6', '#6366f1', '#4f46e5', '#0891b2', '#7c3aed', '#db2777'];
@@ -262,45 +263,7 @@ const ServiceDetails = () => {
           </div>
         )}
       </section>
-
-      {/* ── Footer ───────────────────────────────────────────── */}
-      <footer className="main-footer">
-        <div className="footer-grid">
-          <div className="footer-brand">
-            <div className="logo-area light">
-              <div className="logo-box">🔧</div>
-              <span className="logo-name">FixIT</span>
-            </div>
-            <p>Connecting you with trusted service professionals for all your home needs.</p>
-          </div>
-          <div className="footer-links">
-            <h4>Quick Links</h4>
-            <ul>
-              <li><Link to="/services">Services</Link></li>
-              <li><Link to="/register">Become a Provider</Link></li>
-              <li><Link to="/login">Login</Link></li>
-            </ul>
-          </div>
-          <div className="footer-links">
-            <h4>Popular Services</h4>
-            <ul>
-              <li><Link to="/services">Electrician</Link></li>
-              <li><Link to="/services">Plumber</Link></li>
-              <li><Link to="/services">Carpenter</Link></li>
-              <li><Link to="/services">Cleaning</Link></li>
-            </ul>
-          </div>
-          <div className="footer-links">
-            <h4>Contact Us</h4>
-            <p className="contact-info">📧 support@fixit.com</p>
-            <p className="contact-info">📞 +92 300-1234567</p>
-            <p className="contact-info">📍 Gujranwala, Pakistan</p>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>© 2026 FixIT. All rights reserved.</p>
-        </div>
-      </footer>
+     <Footer />
     </div>
   );
 };

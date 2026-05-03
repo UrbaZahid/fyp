@@ -14,10 +14,29 @@ body {
   min-height: 100vh;
 }
 
-/* Common button styles */
+/* ── Global button base ── */
 button {
   font-family: inherit;
-  transition: all 0.2s ease;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+  background-size: 200% 100%;
+  background-position: 200% center;
+  transition: background-position 0.5s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+button:hover::after {
+  background-position: -200% center;
 }
 
 button:hover {
@@ -25,11 +44,17 @@ button:hover {
 }
 
 button:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
 }
 
-/* Common link styles */
+/* ── Global link styles ── */
 a {
   text-decoration: none;
   color: inherit;
 }
+
+/* ── Global scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }

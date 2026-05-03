@@ -53,7 +53,7 @@ const CustomerNavbar = ({ role, setRole }) => {
       {/* Customer logged in — name + logout */}
       {isCustomer && (
         <div className="nav-auth">
-          <span>👤 {user?.name || 'User'}</span>
+          <span> {user?.name || 'User'}</span>
           <button className="login-link" onClick={handleLogout}>
             Logout
           </button>

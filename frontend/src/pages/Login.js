@@ -335,7 +335,7 @@ const Login = ({ setRole }) => {
         </div>
       )}
 
-      <footer className="main-footer">
+      {/* <footer className="main-footer">
         <div className="footer-grid">
           <div className="footer-brand">
             <div className="logo-area light">
@@ -371,7 +371,7 @@ const Login = ({ setRole }) => {
         <div className="footer-bottom">
           <p>© 2026 FixIT. All rights reserved.</p>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 };

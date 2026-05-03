@@ -1,86 +1,112 @@
+
 .cat-page-container {
-  animation: fadeIn 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-/* Header Section */
 .cat-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .cat-main-title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px 0;
 }
 
 .cat-sub-title {
-  font-size: 14px;
   color: #64748b;
-  margin-top: 5px;
+  font-size: 14px;
+  margin: 0;
 }
 
 .cat-add-btn {
-  background-color: #3b82f6;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
   border: none;
-  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
+  box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+  transition: all 0.22s ease;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: 0.3s;
 }
 
 .cat-add-btn:hover {
-  background-color: #2563eb;
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99,102,241,0.4);
 }
 
-/* Grid Layout */
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
 
-/* Card Styling */
 .category-card {
-  background: white;
+  background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 16px;
-  padding: 24px;
-  transition: all 0.3s ease;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  transition: all 0.25s ease;
   position: relative;
+  overflow: hidden;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  opacity: 0;
+  transition: opacity 0.25s;
 }
 
 .category-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  border-color: #cbd5e1;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(99,102,241,0.1);
+  border-color: #c7d2fe;
+}
+
+.category-card:hover::before {
+  opacity: 1;
 }
 
 .card-top-flex {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
 .cat-icon-display {
-  font-size: 32px;
+  width: 52px; height: 52px;
+  background: #eff6ff;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
 }
 
-/* Edit/Delete Buttons (Hidden until Hover) */
 .cat-action-group {
   display: flex;
   gap: 8px;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s;
 }
 
 .category-card:hover .cat-action-group {
@@ -88,62 +114,34 @@
 }
 
 .cat-edit-icon, .cat-delete-icon {
-  background: #f1f5f9;
+  width: 32px; height: 32px;
+  border-radius: 8px;
   border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.cat-edit-icon:hover { background: #e2e8f0; color: #3b82f6; }
-.cat-delete-icon:hover { background: #fee2e2; color: #ef4444; }
+.cat-edit-icon {
+  background: #f1f5f9; color: #475569;
+}
+.cat-edit-icon:hover { background: #e2e8f0; color: #0f172a; }
 
-/* Content inside Card */
+.cat-delete-icon {
+  background: #fef2f2; color: #dc2626;
+}
+.cat-delete-icon:hover { background: #ef4444; color: #fff; }
+
 .cat-name-heading {
-  font-size: 16px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
   font-weight: 700;
   color: #0f172a;
-  margin: 0;
+  margin: 0 0 8px 0;
 }
 
-.cat-service-count {
-  font-size: 13px;
-  color: #64748b;
-  margin: 4px 0 12px 0;
-}
-
-/* Status Badges */
-.cat-status-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.cat-status-badge.active {
-  background-color: rgba(34, 197, 94, 0.1);
-  color: #15803d;
-}
-
-.cat-status-badge.inactive {
-  background-color: #f1f5f9;
-  color: #64748b;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-/* ── Responsive ── */
-@media (max-width: 600px) {
-  .categories-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 400px) {
-  .categories-grid { grid-template-columns: 1fr; }
+@media (max-width: 768px) {
+  .cat-action-group { opacity: 1; }
 }

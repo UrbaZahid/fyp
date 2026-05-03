@@ -65,8 +65,8 @@ const ProviderDashboard = () => {
         <div className="p-content-inner">
 
           <div className="p-header">
-            <h2>Welcome back, {user.name || 'Provider'} 👋</h2>
-            <p>Aaj ka overview dekho</p>
+            <h2>Welcome back, {user.name || 'Provider'} </h2>
+            <p>Here is a quick review</p>
           </div>
 
           {loading ? (
@@ -123,7 +123,7 @@ const ProviderDashboard = () => {
 
                         <div>
                           <strong>{name}</strong>
-                          <p>📅 {b.date} · {b.time} · {b.city}</p>
+                          <p>{b.date} · {b.time} · {b.city}</p>
                         </div>
                       </div>
 

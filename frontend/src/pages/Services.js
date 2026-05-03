@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import API from '../api/api';
+import Footer from "../components/Footer";
 import './Services.css';
 
 const Services = () => {
@@ -97,35 +98,7 @@ const Services = () => {
         )}
       </section>
 
-      {/* Footer */}
-      <footer className="main-footer">
-        <div className="footer-grid">
-          <div className="footer-brand">
-            <div className="logo-area light">
-              <div className="logo-box">🔧</div>
-              <span className="logo-name">FixIT</span>
-            </div>
-            <p>Connecting you with trusted service professionals for all your home needs.</p>
-          </div>
-          <div className="footer-links">
-            <h4>Quick Links</h4>
-            <ul>
-              <li><Link to="/services">Services</Link></li>
-              <li><Link to="/register">Become a Provider</Link></li>
-              <li><Link to="/login">Login</Link></li>
-            </ul>
-          </div>
-          <div className="footer-links">
-            <h4>Contact Us</h4>
-            <p className="contact-info">📧 support@fixit.com</p>
-            <p className="contact-info">📞 +92 300-1234567</p>
-            <p className="contact-info">📍 Lahore, Pakistan</p>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>© 2026 FixIT. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer/>
     </div>
   );
 };
