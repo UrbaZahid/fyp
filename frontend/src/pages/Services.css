@@ -1,3 +1,4 @@
+.fixit-container { display: flex; flex-direction: column; min-height: 100vh }
 
 .services-header {
   text-align: center;
@@ -33,6 +34,7 @@
 }
 
 .services-content {
+  flex: 1;
   padding: 50px 8%;
   background: #f8fafc;
 }
