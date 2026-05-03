@@ -39,7 +39,20 @@ const handleSubmit = async (e) => {
       setLoading(false);
       return;
     }
+    
+    // ── Role mismatch check ──
+    if (role === 'Customer' && data.user.role !== 'customer') {
+      setError('This account is not a customer account. Please select Provider.');
+      setLoading(false);
+      return;
+    }
 
+    if (role === 'Provider' && data.user.role !== 'provider') {
+      setError('This account is not a provider account. Please select Customer.');
+      setLoading(false);
+      return;
+    }
+    
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
     setRole(data.user.role);
