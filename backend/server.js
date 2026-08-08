@@ -13,7 +13,8 @@ app.use(cors({
     'http://localhost',
     'http://localhost:3000',
     'http://localhost:5173',
-    'https://fyp-woad-chi.vercel.app'
+    'https://fyp-woad-chi.vercel.app',
+    'https://fyp-mseifehbc-urbazahids-projects.vercel.app'
   ],
   credentials: true
 }));
